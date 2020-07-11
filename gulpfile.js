@@ -1,9 +1,9 @@
 //////////////////////////////////////
 // ----- NEEDED GULP MODULES ----- //
 ////////////////////////////////////
-const path = require("path");
+/*const path = require("path");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');*/
 
 var gulp = require("gulp"),
     compiler = require('webpack');
@@ -68,6 +68,17 @@ gulp.task("sass",function(){
         .pipe(gulp.dest("./css/"));
 });
 
+gulp.task("sass-prod",function(){
+    gulp.src(src_sass)
+        .pipe(sass().on("error",function(err){
+            gutil.log(err);
+            this.emit("end");
+        }))
+        .pipe(autoprefixer())
+        .pipe(cleancss())
+        .pipe(gulp.dest("./css/"));
+});
+
 gulp.task("js", function() {
     return gulp.src(src_js) 
         .pipe(webpack({
@@ -82,13 +93,35 @@ gulp.task("js", function() {
                         test: /\.m?js$/,
                         exclude: /node_modules/,
                         use:[
-                            { loader: 'babel-loader', options: { presets: [ ['@babel/preset-env', {"targets": { "ie": "11" }}] ], cacheDirectory: true } }
+                            { loader: 'babel-loader', options: { presets: [ ['@babel/preset-env', {"targets": { "ie": "11" }}] ] } }
                         ]
                     }
                 ]
             }
         },compiler, function(err, stats) {
             /* Use stats to do more things if needed */
+        }))
+        .pipe(gulp.dest('./js/'));
+});
+
+gulp.task("js-prod", function() {
+    return gulp.src(src_js) 
+        .pipe(webpack({
+            mode: 'production',
+            output: {
+                filename: 'scripts.min.js',
+            },
+            module: {
+                rules:[       
+                    {
+                        test: /\.m?js$/,
+                        exclude: /node_modules/,
+                        use:[
+                            { loader: 'babel-loader', options: { presets: [ ['@babel/preset-env', {"targets": { "ie": "11" }}] ] } }
+                        ]
+                    }
+                ]
+            }
         }))
         .pipe(gulp.dest('./js/'));
 });
@@ -100,8 +133,7 @@ gulp.task("js", function() {
 gulp.task("vendor-js", function(){
     gulp.src(vendor_js) 
         .pipe(webpack({
-            mode: 'development',
-            devtool: 'source-map',
+            mode: 'production',
             output: {
                 filename: 'vendor.min.js',
             },
@@ -118,27 +150,15 @@ gulp.task("vendor-js", function(){
                         test: /\.m?js$/,
                         exclude: /node_modules/,
                         use:[
-                            { loader: 'babel-loader', options: { presets: [ ['@babel/preset-env', {"targets": { "ie": "11" }}] ], cacheDirectory: true } }
+                            { loader: 'babel-loader', options: { presets: [ ['@babel/preset-env', {"targets": { "ie": "11" }}] ] } }
                         ]
                     }
                 ]
-            },
-            plugins:[  
-                // počisti odvečne .js in .map hashfile, ki se generirajo v vendor folderju.
-                new CleanWebpackPlugin({
-                    cleanOnceBeforeBuildPatterns: ['./vendor/**/*.js', './vendor/**/*.map']
-                }),
-                new HtmlWebpackPlugin({
-                    hash:true,
-                    filename:'sub_tpl_head.php',
-                    links:['./vendor/vendor.min.css'],
-                    scripts:['./vendor/vendor.min.js'],
-                    template:'./sub_tpl_head.ejs'
-                })
-            ]
+            }
         }))
         .pipe(gulp.dest('./vendor/'));
 });
+
 gulp.task("vendor-css", function(){
     gulp.src(vendor_css)
         .pipe(cleancss())
@@ -173,3 +193,6 @@ gulp.task("default",["sass-watch","js-watch"]);
 
 // create vendor scripts
 gulp.task("vendor", ["vendor-js", "vendor-css"]);
+
+
+gulp.task("prod",["sass-prod","js-prod"]);

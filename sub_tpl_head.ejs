@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <link rel="stylesheet" type="text/css" href="<%= htmlWebpackPlugin.options.links %>"/>
-	<link rel="stylesheet" type="text/css" href="./css/style.css" />
-    <script type="text/javascript" src="<%= htmlWebpackPlugin.options.scripts %>"></script>
+    <link rel="stylesheet" type="text/css" href="<%= htmlWebpackPlugin.options.links[0] %>"/>
+    <link rel="stylesheet" type="text/css" href="<%= htmlWebpackPlugin.options.links[1] %>"/>
+	<!-- <link rel="stylesheet" type="text/css" href="./css/style.css" /> -->
+    <script type="text/javascript" src="<%= htmlWebpackPlugin.options.scripts[0] %>"></script>
+    <script type="text/javascript" src="<%= htmlWebpackPlugin.options.scripts[1] %>"></script>
 	<!-- <script type="text/javascript" src="./js/scripts.min.js"></script> -->
 
    
