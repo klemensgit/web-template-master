@@ -2,8 +2,8 @@
 // ----- NEEDED GULP MODULES ----- //
 ////////////////////////////////////
 const path = require("path");
-//const HtmlWebpackPlugin = require('html-webpack-plugin');
-//const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 var gulp = require("gulp"),
     compiler = require('webpack');
@@ -122,7 +122,20 @@ gulp.task("vendor-js", function(){
                         ]
                     }
                 ]
-            }
+            },
+            plugins:[  
+                // počisti odvečne .js in .map hashfile, ki se generirajo v vendor folderju.
+                new CleanWebpackPlugin({
+                    cleanOnceBeforeBuildPatterns: ['./vendor/**/*.js', './vendor/**/*.map']
+                }),
+                new HtmlWebpackPlugin({
+                    hash:true,
+                    filename:'sub_tpl_head.php',
+                    links:['./vendor/vendor.min.css'],
+                    scripts:['./vendor/vendor.min.js'],
+                    template:'./sub_tpl_head.ejs'
+                })
+            ]
         }))
         .pipe(gulp.dest('./vendor/'));
 });
