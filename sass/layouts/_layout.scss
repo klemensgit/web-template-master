@@ -1,0 +1,36 @@
+h1{
+    font-size: 2rem;
+    font-weight: 900;
+    font-family: $header-font;
+    line-height: 1;
+}
+
+h2{
+    font-size: 1.625rem;
+    font-weight: 600;
+    font-family: $header-font;
+    line-height: 1;
+}
+
+h3{
+    font-size: 1.375rem;
+    font-weight: 500;
+    font-family: $header-font;
+    line-height: 1;
+}
+
+p{
+    font-size: 1rem;
+    font-weight: 400;
+    font-family: $header-font;
+    line-height: 1;
+}
+
+.single-item{
+    div{
+        height:400px; 
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+}
