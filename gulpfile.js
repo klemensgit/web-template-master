@@ -6,6 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');*/
 
 var gulp = require("gulp"),
+    purgecss = require('gulp-purgecss'),
     compiler = require('webpack');
     webpack = require('webpack-stream'),
     sass = require("gulp-sass"),
@@ -76,6 +77,9 @@ gulp.task("sass-prod",function(){
         }))
         .pipe(autoprefixer())
         .pipe(cleancss())
+        .pipe(purgecss({
+            content: ['./js/**/*.js', './lib/*.js', './**/*.php', './**/*.html', './**/*.inc', './node_modules/slick-carousel/slick/*.js']
+        }))
         .pipe(gulp.dest("./css/"));
 });
 
@@ -162,6 +166,9 @@ gulp.task("vendor-js", function(){
 gulp.task("vendor-css", function(){
     gulp.src(vendor_css)
         .pipe(cleancss())
+        .pipe(purgecss({
+            content: ['./js/**/*.js', './lib/*.js', './**/*.php', './**/*.html', './**/*.inc', './node_modules/slick-carousel/slick/*.js']
+        }))
         .pipe(concat('vendor.min.css'))
         .pipe(gulp.dest('./vendor/'));
 });

@@ -48,6 +48,10 @@ $(document).ready(function(){
         slidesToScroll: 1
     });
 
+    $('.proba').on('click', function(){
+        console.log('dela');
+    });
+
     var objects = ['ss', 'ff', 'gg'];
     for (const wow of objects) {console.log(wow)}
 });
